@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+import rospy
+from geometry_msgs.msg import InertiaStamped
+import random
+
+
+
+if __name__ == "__main__": #incio del programa
+
+    #Inicializar nodo
+    rospy.init_node('nodo_publicador_inercia')
+
+    #publicador
+    topic = 'datos_inerciales' 
+    pub = rospy.Publisher(topic, InertiaStamped, queue_size=1)
+
+    # Creación de una instancia (vacía) del mensaje
+    inertial_msg = InertiaStamped()
+
+    # Tiempo de ejecución del bucle (en Hz)
+    rate = rospy.Rate(4)    # 4hz = 1/0.25s
+
+    while not rospy.is_shutdown():
+
+        inertial_msg.header.stamp = rospy.Time.now() #tiempo cuando fue creado
+        inertial_msg.header.frame_id = 'frame_base' #name referencia
+        #masa
+        inertial_msg.inertia.m = 5 #kg
+        #centro de masa
+        inertial_msg.inertia.com.x = 1
+        inertial_msg.inertia.com.y = 1
+        inertial_msg.inertia.com.z = 1
+
+        value_random = random.uniform(0, 100)
+        #inercias
+        inertial_msg.inertia.ixx =random.uniform(0, 100)
+        inertial_msg.inertia.ixy =random.uniform(0, 100)
+        inertial_msg.inertia.ixz =random.uniform(0, 100)
+        inertial_msg.inertia.iyy =random.uniform(0, 100)
+        inertial_msg.inertia.iyz =random.uniform(0, 100)
+        inertial_msg.inertia.izz =random.uniform(0, 100)
+
+        # Publicar el mensaje
+        pub.publish(inertial_msg)
+        # Esperar
+        rate.sleep()
+
