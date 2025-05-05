@@ -2,9 +2,18 @@
 import rospy
 from geometry_msgs.msg import Quaternion
 
-# Función de callback
-def callback_func(msg):
-    print("Cuaternion leido: w={}, x={}, y={}, z={}".format(msg.w, msg.x, msg.y, msg.z))
+
+class SuscriptorQuat(object):
+    def __init__(self):
+        topic = 'topic_quat'
+        self.sub = rospy.Subscriber(topic, Quaternion, self.callback_func)
+
+
+    # Función de callback
+    def callback_func(self,msg):
+        print("Cuaternion leido: w={}, x={}, y={}, z={}".format(msg.w, msg.x, msg.y, msg.z))
+
+
 
 if __name__ == "__main__": # Inicio del programa principal
 
@@ -12,8 +21,7 @@ if __name__ == "__main__": # Inicio del programa principal
     rospy.init_node('nodo_suscriptor_quat')
 
     # Declaración del suscriptor
-    topic = 'topic_quat'
-    pub = rospy.Subscriber(topic, Quaternion, callback_func)
+    SuscriptorQuat()
 
     # Mantener el nodo activo (hasta que se detenga
     rospy.spin()

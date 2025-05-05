@@ -2,25 +2,36 @@
 import rospy
 from geometry_msgs.msg import InertiaStamped
 
-# Función de callback
-def callback_func(msg):
-    print("Pensajes recibido: ")
-    print(f"  Masa(m): {msg.inertia.m}")
-    print(f"  Centro de masa (com): x={msg.inertia.com.x}, y={msg.inertia.com.y}, z={msg.inertia.com.z}")
-    print(f"  Momentos de inercia:")
-    print(f"    ixx: {msg.inertia.ixx}, iyy: {msg.inertia.iyy}, izz: {msg.inertia.izz}")
-    print(f"    ixy: {msg.inertia.ixy:.2f}, ixz: {msg.inertia.ixz}, iyz: {msg.inertia.iyz}")
-    print("--------------------------------------------------------------------")
+
+class SuscriptorInercial(object):
+    def __init__(self):
+        # Declaración del suscriptor
+
+        topic = 'datos_inerciales'
+        self.sub = rospy.Subscriber(topic, InertiaStamped, self.callback_func)
+
+    # Función de callback
+    def callback_func(self,msg):
+        print("Pensajes recibido: ")
+        print(f"  Masa(m): {msg.inertia.m}")
+        print(f"  Centro de masa (com): x={msg.inertia.com.x}, y={msg.inertia.com.y}, z={msg.inertia.com.z}")
+        print(f"  Momentos de inercia:")
+        print(f"    ixx: {msg.inertia.ixx}, iyy: {msg.inertia.iyy}, izz: {msg.inertia.izz}")
+        print(f"    ixy: {msg.inertia.ixy:.2f}, ixz: {msg.inertia.ixz}, iyz: {msg.inertia.iyz}")
+        print("--------------------------------------------------------------------")
     #opcion hacerlo con rospy.loginfo() nivel de mensaje, timestamp
+
+
+
+
+
 
 if __name__ == "__main__": # Inicio del programa principal
 
     # Inicializar el nodo
     rospy.init_node('nodo_suscriptor_inertial')
 
-    # Declaración del suscriptor
-    topic = 'datos_inerciales'
-    pub = rospy.Subscriber(topic, InertiaStamped, callback_func)
+    SuscriptorInercial()
 
     # Mantener el nodo activo (hasta que se detenga
     rospy.spin()

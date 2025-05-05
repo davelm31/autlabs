@@ -7,10 +7,10 @@ class SuscriptorLaserScan(object):
     def __init__(self):
         topic = '/scan'
         self.pub = rospy.Subscriber(topic, LaserScan, self.callback_lidar)
-        self.rangos = [0.0]*5 
+        self.rangos = [0.0]*10
 
     def callback_lidar(self,msg):
-        self.rangos = msg.ranges[:5]
+        self.rangos = msg.ranges[20:25]
         print(self.rangos)
     
 

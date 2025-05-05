@@ -2,9 +2,18 @@
 import rospy
 from geometry_msgs.msg import Point
 
-# Función de callback
-def callback_func(msg):
-    print("Punto leido: x={}, y={}, z={}".format(msg.x, msg.y, msg.z))
+
+class SuscriptorPoint(object):
+    def __init__(self):
+        topic = 'topic_point'
+        self.sub = rospy.Subscriber(topic, Point, self.callback_func)
+        self.rangos = [0.0]*5 
+
+    # Función de callback
+    def callback_func(self,msg):
+        print("Punto leido: x={}, y={}, z={}".format(msg.x, msg.y, msg.z))
+
+
 
 if __name__ == "__main__": # Inicio del programa principal
 
@@ -12,8 +21,7 @@ if __name__ == "__main__": # Inicio del programa principal
     rospy.init_node('nodo_suscriptor_point')
 
     # Declaración del suscriptor
-    topic = 'topic_point'
-    pub = rospy.Subscriber(topic, Point, callback_func)
+    sub = SuscriptorPoint()
 
     # Mantener el nodo activo (hasta que se detenga
     rospy.spin()

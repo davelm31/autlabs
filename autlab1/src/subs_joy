@@ -2,14 +2,20 @@
 import rospy
 from sensor_msgs.msg import Joy
 
-# Función de callback
-def callback_func(msg):
-    print("\nTiempo: " + str(msg.header.stamp))
-    print("Frame leido: " + msg.header.frame_id)
-    print("Ejes leidos: ")
-    axes = msg.axes
-    for i in range(len(axes)):
-        print(str(axes[i]))
+class SuscriptorJoy(object):
+    def __init__(self):
+        # Declaración del suscriptor
+        topic = 'topic_joy'
+        self.sub = rospy.Subscriber(topic, Joy, self.callback_func)
+
+    # Función de callback
+    def callback_func(self,msg):
+        print("\nTiempo: " + str(msg.header.stamp))
+        print("Frame leido: " + msg.header.frame_id)
+        print("Ejes leidos: " + str(msg.axes))
+
+
+
 
 if __name__ == "__main__": # Inicio del programa principal
 
@@ -17,8 +23,7 @@ if __name__ == "__main__": # Inicio del programa principal
     rospy.init_node('nodo_suscriptor_joy')
 
     # Declaración del suscriptor
-    topic = 'topic_joy'
-    pub = rospy.Subscriber(topic, Joy, callback_func)
+    SuscriptorJoy()
 
     # Mantener el nodo activo (hasta que se detenga
     rospy.spin()

@@ -4,6 +4,12 @@ from geometry_msgs.msg import InertiaStamped
 import random
 
 
+class Inertial():
+
+  def __init__(self):
+    topic = 'datos_inerciales' 
+    self.pub = rospy.Publisher(topic, InertiaStamped, queue_size=1)
+
 
 if __name__ == "__main__": #incio del programa
 
@@ -11,8 +17,7 @@ if __name__ == "__main__": #incio del programa
     rospy.init_node('nodo_publicador_inercia')
 
     #publicador
-    topic = 'datos_inerciales' 
-    pub = rospy.Publisher(topic, InertiaStamped, queue_size=1)
+    publicador  = Inertial()
 
     # Creación de una instancia (vacía) del mensaje
     inertial_msg = InertiaStamped()
@@ -41,7 +46,7 @@ if __name__ == "__main__": #incio del programa
         inertial_msg.inertia.izz =random.uniform(0, 100)
 
         # Publicar el mensaje
-        pub.publish(inertial_msg)
+        publicador.pub.publish(inertial_msg)
         # Esperar
         rate.sleep()
 

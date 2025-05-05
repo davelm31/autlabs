@@ -2,21 +2,32 @@
 import rospy
 from geometry_msgs.msg import Pose
 
-# Función de callback
-def callback_func(msg):
-    p = msg.position
-    q = msg.orientation
-    print("\nPosicion leida: x={}, y={}, z={}".format(p.x, p.y, p.z))
-    print("Orientacion leida: w={}, x={}, y={}, z={}".format(q.w, q.x, q.y, q.z))
+
+class SuscriptorPose(object):
+    def __init__(self):
+        # Declaración del suscriptor
+        topic = 'topic_pose'
+        self.sub = rospy.Subscriber(topic, Pose, self.callback_func)
+
+    # Función de callback
+    def callback_func(self,msg):
+        self.p = msg.position
+        self.q = msg.orientation
+        print("\nPosicion leida: x={}, y={}, z={}".format(self.p.x, self.p.y, self.p.z))
+        print("Orientacion leida: w={}, x={}, y={}, z={}".format(self.q.w, self.q.x, self.q.y, self.q.z))
+
+
+
+
+
+
 
 if __name__ == "__main__": # Inicio del programa principal
 
     # Inicializar el nodo
     rospy.init_node('nodo_suscriptor_pose')
 
-    # Declaración del suscriptor
-    topic = 'topic_pose'
-    pub = rospy.Subscriber(topic, Pose, callback_func)
+    SuscriptorPose()
 
     # Mantener el nodo activo (hasta que se detenga
     rospy.spin()
