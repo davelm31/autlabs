@@ -7,7 +7,7 @@
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
     <!-- Nodo para RViz -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find opt_ur5)/config/view_robot.rviz"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find autlab2)/config/view_robot.rviz"/>
 
     <!-- Nodo para publicar estados de las articulaciones (si no usas controladores) -->
     <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"/>

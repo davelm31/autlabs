@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+import rospy
+from sensor_msgs.msg import LaserScan
+from std_msgs.msg import Float32MultiArray
+from geometry_msgs.msg import Twist
+
+class SuscriptorLaserScan(object):
+    def __init__(self):
+        topic = '/scan'
+        self.sub = rospy.Subscriber(topic, LaserScan, self.callback_lidar)
+         
+        
+        self.rangos = [0.0]*10
+
+    def callback_lidar(self,msg):
+        self.rangos = [msg.ranges[90]]
+        print(self.rangos)
+    
+
+    def get_laserscan(self):
+        return self.rangos
+
+if __name__ == "__main__": # Inicio del programa principal
+
+    rospy.init_node('nodo_lidar') # Inicializar el nodo
+    scan = SuscriptorLaserScan() # Crear el suscriptor
+    topic2 = 'cmd_vel'
+    pub = rospy.Publisher(topic2, Twist, queue_size=1)
+
+    dist_max = 0.5
+    k_p = 0.8
+    
+    # Creación de una instancia (vacía) del mensaje
+    twist_msg = Twist()
+    
+    # Creación de una instancia (vacía) del mensaje
+    dist = Float32MultiArray()
+    error = 0.0
+    # Tiempo de ejecución del bucle (en Hz)
+    rate = rospy.Rate(10)
+    
+    while not rospy.is_shutdown():
+        # Leer el valor actual (del suscriptor)
+        rangos = scan.get_laserscan()
+        dist.data = rangos
+        if dist.data > [0.5]:
+            dist.data = [0.1]
+        if dist.data < [0.37]:
+            twist_msg.angular.z = -0.08
+        else:
+            
+            twist_msg.angular.z = k_p*error
+        error = dist_max - dist.data[0]
+        twist_msg.linear.x = 0.05
+        pub.publish(twist_msg)
+        
+        # Publicar el mensaje
+        # Esperar
+        rate.sleep()
