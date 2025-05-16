@@ -153,7 +153,7 @@
   <joint name="top_sensor_joint" type="fixed">
     <parent link="base_link"/>
     <child link="top_sensor"/>
-    <origin xyz="0 0 0.07" rpy="0 0 0"/>
+    <origin xyz="0 0 0.08" rpy="0 0 0"/>
   </joint>
 
   <joint name="rear_support_joint_1" type="fixed">
@@ -206,7 +206,7 @@
   <gazebo reference="top_sensor">
     <sensor type="ray" name="lds_lfcd_sensor">
       <pose>0 0 0 0 0 0</pose>
-      <visualize></visualize>
+      <visualize>true</visualize>
       <update_rate>5</update_rate>
       <ray>
         <scan>
